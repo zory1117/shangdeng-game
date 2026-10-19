@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#171d22">
+  <meta name="description" content="兴宁客家上灯护灯小游戏：选择护灯人，带着花灯穿过院落。Created by 欣诺 Powered by Codex。">
   <title>兴宁客家上灯护灯小游戏</title>
   <style>
     :root{color-scheme:dark;--bg:#171d22;--panel:#20272c;--edge:#374047;--ink:#f4e6c8;--muted:#a7aca6;--gold:#e8b65c;--green:#9ebda0}
@@ -57,6 +58,10 @@ main{max-width:1180px;padding-top:25px}.masthead{border-bottom:2px solid #304448
 @media(max-width:700px){.story-text p{min-height:3.6em}}
 .music-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 16px;background:#182831;border:2px solid #0c171d;border-top:0;color:#b0bba7;font-size:11px}.music-controls button{background:#293c42;border:2px solid #0b161f;color:#efcc8a;padding:5px 12px;font:inherit;cursor:pointer;min-width:88px}.music-controls input{width:112px;accent-color:#e8b65c;cursor:pointer}.music-controls output{min-width:34px;font-family:monospace;color:#efcc8a}.music-controls>span{margin-left:auto;color:#839e97;font-size:10px}.music-controls button:focus-visible,.music-controls input:focus-visible{outline:2px solid #e8b65c;outline-offset:3px}@media(max-width:500px){.music-controls{gap:6px;padding:6px 9px}.music-controls>span{display:none}.music-controls input{width:95px}}
 
+.loading-credit{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 20px;margin:22px 0 0;padding-top:16px;border-top:1px solid #805642;font-size:12px;letter-spacing:.4px;color:#f4d591}
+.site-links{position:relative;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 24px;padding:18px 24px 24px;font-size:11px;line-height:1.8;color:#a3b5ac}
+.site-links a{color:#d9be96;text-underline-offset:4px}.site-links a:hover{color:#f4d591}.site-links a:focus-visible{outline:2px solid #e8b65c;outline-offset:4px}
+@media(max-width:700px){.loading-credit{font-size:11px;gap:4px 14px;margin-top:18px;padding-top:13px}.site-links{gap:8px 16px;padding:16px 18px;font-size:10px}}
 </style>
 </head>
 <body>
@@ -69,6 +74,7 @@ main{max-width:1180px;padding-top:25px}.masthead{border-bottom:2px solid #304448
     <p class="opening-caption">灯火将明，等你同行</p>
     <div class="loading-head"><span>正在准备花灯与院落</span><span id="loading-value">0%</span></div>
     <div class="opening-progress" id="loading-progress" role="progressbar" aria-label="游戏资源加载进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="loading-fill"></div></div>
+    <p class="loading-credit"><span>Created by 欣诺</span> <span>Powered by Codex</span></p>
   </section>
   <section class="story-panel" id="story-pane" tabindex="-1" aria-labelledby="story-title" hidden>
     <div class="story-art"><img src="assets/background/story-weilongwu.png" alt="傍晚的兴宁客家围龙屋，庭院中摆放着传统上灯花灯"><span>傍晚 · 兴宁围龙屋</span></div>
@@ -120,6 +126,11 @@ main{max-width:1180px;padding-top:25px}.masthead{border-bottom:2px solid #304448
   <footer class="footer"><span>兴宁客家上灯 · 民俗主题像素小游戏</span><span>纯 HTML + JavaScript · 无框架</span></footer>
 </main>
 <!-- 合并音乐控制：原 music.js -->
+<nav class="site-links" aria-label="站点与项目信息">
+  <a href="/">← 返回个人技术分享</a>
+  <span>本站改编自 <a href="https://github.com/yulele6666-tech/shangdeng-game" target="_blank" rel="noopener noreferrer">shangdeng-game 原项目</a></span>
+  <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">粤ICP备2026141245号</a>
+</nav>
 <script>
 'use strict';
 // Local WAV playback only: no network service, audio framework or game logic.
