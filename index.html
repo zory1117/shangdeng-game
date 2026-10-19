@@ -691,7 +691,9 @@ function boot() {
   }
   function drawPlayer() {
     const p = game.player, x = Math.round(p.x), y = Math.round(p.y);
-    if (!sprite(characterKey(opening.selected), x, y + 12, 38, 52, p.facing.x < 0)) {
+    const flipped = p.facing.x < 0;
+    const drawn = sprite(characterKey(opening.selected), x, y + 12, 38, 52, flipped);
+    if (!drawn) {
     const walk = (keys.has('ArrowUp') || keys.has('ArrowLeft') || keys.has('ArrowDown') || keys.has('ArrowRight')) && game.state === 'playing';
       const step = walk ? Math.floor(game.elapsed * 9) % 2 * 3 : 0;
       block(ctx, x - 12, y - 27, 24, 18, '#d7bc91');
@@ -707,17 +709,28 @@ function boot() {
       ctx.fillStyle = '#172026'; ctx.fillRect(eyeX, y - 20, 3, 3);
       if (!p.facing.x) ctx.fillRect(x + 3, y - 20, 3, 3);
     }
-    // 竹杆方向和攻击命中区域使用同一个 facing。
+    // 握点对齐裁剪后素材中抬起的手，随人物镜像；身体坐标仍用于碰撞。
+    const hand = drawn ? (opening.selected === 'female' ? { x: 16, y: -20 } : { x: 15, y: -18 }) : { x: 18, y: -15 };
+    const hx = x + (flipped ? -hand.x : hand.x), hy = y + hand.y;
+    if (!drawn) {
+      ctx.strokeStyle = '#d7bc91'; ctx.lineWidth = 6;
+      ctx.beginPath(); ctx.moveTo(x + (flipped ? -12 : 12), y - 7); ctx.lineTo(hx, hy); ctx.stroke();
+    }
+    // 竹杆沿攻击方向绕手部挥动，不改变攻击判定。
     const f = game.swing > 0 ? game.swingFacing : p.facing;
     const baseAngle = Math.atan2(f.y, f.x);
     const angle = baseAngle + (game.swing > 0 ? (1 - game.swing / CONFIG.attackDuration) * 1.9 - 0.95 : 0.2);
-    const bx = x + Math.cos(angle) * 63, by = y + Math.sin(angle) * 63;
-    ctx.lineCap = 'square'; ctx.strokeStyle = '#0c1417'; ctx.lineWidth = 8;
-    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(bx, by); ctx.stroke();
-    ctx.strokeStyle = '#c8b57a'; ctx.lineWidth = 4; ctx.stroke();
-    for (let i = 1; i < 4; i++) { const sx = x + (bx - x) * i / 4, sy = y + (by - y) * i / 4; ctx.fillStyle = '#726b48'; ctx.fillRect(Math.round(sx) - 2, Math.round(sy) - 2, 4, 4); }
+    const dx = Math.cos(angle), dy = Math.sin(angle), bx = hx + dx * 63, by = hy + dy * 63;
+    ctx.lineCap = 'square'; ctx.strokeStyle = '#0c1417'; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(hx - dx * 4, hy - dy * 4); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.strokeStyle = '#c8b57a'; ctx.lineWidth = 3; ctx.stroke();
+    for (let i = 1; i < 4; i++) { const sx = hx + (bx - hx) * i / 4, sy = hy + (by - hy) * i / 4; ctx.fillStyle = '#726b48'; ctx.fillRect(Math.round(sx) - 1, Math.round(sy) - 1, 3, 3); }
+    // 手指盖住竹杆，显示握持关系，避免杆身穿过人物。
+    block(ctx, hx - 3, hy - 3, 6, 6, '#efac78', '#382825', 1);
+    ctx.fillStyle = '#ffd09a'; ctx.fillRect(hx - 2, hy - 2, 3, 2);
+    ctx.fillStyle = '#ad6b4c'; ctx.fillRect(hx - 2, hy + 1, 4, 1);
     if (game.swing > 0) {
-      ctx.strokeStyle = '#f3d28b'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y, 75, baseAngle - 1.35, baseAngle + 1.35); ctx.stroke();
+      ctx.strokeStyle = '#f3d28b'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(hx, hy, 75, baseAngle - 1.35, baseAngle + 1.35); ctx.stroke();
     }
   }
   function drawLantern() {
